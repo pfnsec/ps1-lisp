@@ -1,3 +1,5 @@
+(load-option 'format)
+
 (define source
   (open-input-file "test.lisp"))
 
@@ -16,11 +18,14 @@
         ((null? expr)
           (begin
            (display "NIL")))
+        ((number? expr)
+          (begin
+           (display 
+             (format #f "WORD(~A)" expr))))
         (#t
           (begin
-           (display "SYMBOL(\"")
-           (display expr)
-           (display "\")")))))
+           (display 
+             (format #f "SYMBOL(\"~A\")" expr))))))
     "")
 
 

@@ -5,6 +5,7 @@
 
 typedef struct symbol {
     char *name;
+    enum lifetime { t_static, t_dynamic } lifetime;
     value *v;
     struct symbol *next;
 } symbol;
@@ -18,6 +19,7 @@ typedef struct symbol {
 value *sym_lookup(symbol *table, char *name);
 symbol *sym_set(symbol *table, char *name, value *v);
 
-value *eval(symbol *table, cons *c);
+value *eval(symbol *table, value *v);
+value *eval_symbol(symbol *table, value *v);
 
 #endif
