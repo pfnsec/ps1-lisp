@@ -10,7 +10,14 @@ typedef struct cons cons;
 typedef struct value *(*defun)(value *v);
 
 typedef struct value {
-  enum type { t_cons, t_symbol, t_word, t_defun, t_nil} type;
+  enum type { 
+      t_cons, 
+      t_symbol, 
+      t_word, 
+      t_defun, 
+      t_lambda, 
+      t_nil
+  } type;
 
   union {
     cons     *cons;
@@ -34,6 +41,7 @@ typedef struct cons {
 
 #define IS_NIL(__value)   (__value->type == t_nil)
 #define IS_CONS(__value)  (__value->type == t_cons)
+#define IS_LAMBDA(__value)  (__value->type == t_lambda)
 #define IS_WORD(__value)  (__value->type == t_word)
 #define IS_DEFUN(__value) (__value->type == t_defun)
 #define IS_SYMBOL(__value) (__value->type == t_symbol)

@@ -36,13 +36,13 @@ typedef struct symcache_block {
     struct symcache_block *next;
 } symcache_block;
 
-#define CCACHE_BLOCK(__next) { .mask = 0, .mark = 0, .block = { [0 ... 31] = {.car = WORD(0), .cdr = WORD(0)}}, .next = __next }
+#define CCACHE_BLOCK(__next) &(ccache_block){ .mask = 0, .mark = 0, .block = { [0 ... 31] = {.car = WORD(0), .cdr = WORD(0)}}, .next = __next }
 #define CCACHE_BLOCK_END (ccache_block *)0
 
-#define VCACHE_BLOCK(__next) { .mask = 0, .mark = 0, .block = { [0 ... 31] = {.type = t_nil}}, .next = __next }
+#define VCACHE_BLOCK(__next) &(vcache_block){ .mask = 0, .mark = 0, .block = { [0 ... 31] = {.type = t_nil}}, .next = __next }
 #define VCACHE_BLOCK_END (vcache_block *)0
 
-#define SYMCACHE_BLOCK(__next) { .mask = 0, .mark = 0, .block = { [0 ... 31] = {.name = (char *)0, .lifetime = t_static, .v = (value *)0, .next = (symbol *)0 }}, .next = __next }
+#define SYMCACHE_BLOCK(__next) &(symcache_block){ .mask = 0, .mark = 0, .block = { [0 ... 31] = {.name = (char *)0, .lifetime = t_static, .v = (value *)0, .next = (symbol *)0 }}, .next = __next }
 #define SYMCACHE_BLOCK_END (symcache_block *)0
 
 cons *cons_alloc();

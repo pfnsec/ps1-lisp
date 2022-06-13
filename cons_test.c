@@ -19,47 +19,18 @@ value test = CONS(
         NIL))
 );
 
-value v = CONS(SYMBOL("define"), CONS(CONS(SYMBOL("sqrt"), CONS(SYMBOL("x"), CONS(SYMBOL("y"), NIL))), CONS(CONS(SYMBOL("*"), CONS(SYMBOL("x"), CONS(SYMBOL("y"), NIL))), NIL)));
-
-value *map(value *v) {
-    return v;
-}
-
-value *times_ten(value *v) {
-    v->word += 1;
-    return v;
-}
-
-value map_v = {
-    .type = t_defun,
-    .fn = map
-};
-
-value fnt = {
-    .type = t_defun,
-    .fn = times_ten
-};
-
-symbol *sym_table = 
-            SYMBOL_ENTRY("test", &v,
-            SYMBOL_ENTRY("map", &map_v,
-            SYMBOL_ENTRY("times_ten", &fnt,
-            SYMBOL_ENTRY("toast", &test, 
-            SYMBOL_ENTRY("teest", &v, SYMBOL_END)))));
-
-value hund = CONS(
-    SYMBOL("map"), 
-    CONS(SYMBOL("times_ten"), CONS(WORD(1), CONS(WORD(2), NIL)))
-    );
 
 
 
-value twelve = CONS(SYMBOL("*"), CONS(WORD(3), CONS(WORD(3), CONS(WORD(3), CONS(WORD(3), NIL)))));
+value fact = CONS(SYMBOL("define"), CONS(SYMBOL("fact"), CONS(CONS(SYMBOL("lambda"), CONS(CONS(SYMBOL("x"), NIL), CONS(CONS(SYMBOL("if"), CONS(CONS(SYMBOL("="), CONS(SYMBOL("x"), CONS(WORD(1), NIL))), CONS(SYMBOL("x"), CONS(CONS(SYMBOL("*"), CONS(SYMBOL("x"), CONS(CONS(SYMBOL("fact"), CONS(CONS(SYMBOL("-"), CONS(SYMBOL("x"), CONS(WORD(1), NIL))), NIL)), NIL))), NIL)))), NIL))), NIL)));
 
+value ten_fact = CONS(SYMBOL("fact"), CONS(WORD(10), NIL));
 
-value fact = CONS(SYMBOL("defun"), CONS(CONS(SYMBOL("fact"), CONS(SYMBOL("x"), NIL)), CONS(CONS(SYMBOL("if"), CONS(CONS(SYMBOL("="), CONS(SYMBOL("x"), CONS(SYMBOL("1"), NIL))), CONS(SYMBOL("x"), CONS(CONS(SYMBOL("*"), CONS(SYMBOL("x"), CONS(CONS(SYMBOL("fact"), CONS(CONS(SYMBOL("-"), CONS(SYMBOL("x"), CONS(SYMBOL("1"), NIL))), NIL)), NIL))), NIL)))), NIL)));
+value is_three = CONS(SYMBOL("define"), CONS(SYMBOL("is-3"), CONS(CONS(SYMBOL("lambda"), CONS(CONS(SYMBOL("x"), NIL), CONS(CONS(SYMBOL("if"), CONS(CONS(SYMBOL("="), CONS(SYMBOL("x"), CONS(WORD(3), NIL))), CONS(WORD(1), CONS(WORD(0), NIL)))), NIL))), NIL)));
 
+value map_three = CONS(SYMBOL("map"), CONS(SYMBOL("is-3"), CONS(CONS(WORD(3), CONS(WORD(4), CONS(WORD(3), CONS(WORD(2), NIL)))), NIL)));
 
+value test_map = CONS(SYMBOL("map"), CONS(CONS(SYMBOL("lambda"), CONS(CONS(SYMBOL("x"), NIL), CONS(CONS(SYMBOL("*"), CONS(WORD(10), CONS(SYMBOL("x"), NIL))), NIL))), CONS(CONS(WORD(1), CONS(WORD(2), CONS(WORD(3), CONS(WORD(4), CONS(WORD(5), NIL))))), NIL)));
 
 void print_value(value *v) {
     if(!v) {
@@ -72,6 +43,9 @@ void print_value(value *v) {
         printf("%x", v->word);
     } else if(v->type == t_defun) {
         printf("<defun>");
+    } else if(v->type == t_lambda) {
+        printf("lambda ");
+        print_cons(v->cons);
     } else if(v->type == t_cons) {
         print_cons(v->cons);
     }
@@ -88,16 +62,28 @@ void print_cons(cons *c) {
 }
 
 int main() {
-    // cons *c = cons_alloc();
-    // cons_free(cons_alloc());
-    // cons_free(cons_alloc());
-    // cons_free(cons_alloc());
-    // cons_free(cons_alloc());
-    // cons_free(cons_alloc());
-    // cons_free(c);
+    /*
+    print_value(eval(prelude_symtable, &is_three));
+    printf("\n");
+    print_value(eval(prelude_symtable, &map_three));
+    printf("\n");
+
+
+    print_value( &test_map);
+    printf("\n");
+    print_value(eval(prelude_symtable, &test_map));
+    printf("\n");
+
+    */
+    print_value(eval(prelude_symtable, &fact));
+    printf("\n");
+    print_value(eval(prelude_symtable, &ten_fact));
+    printf("\n");
+
+    print_symtable(prelude_symtable);
+    printf("\n");
+   
     mark_reset();
-    print_value(&twelve);
-    print_value(eval(prelude_symtable, &twelve));
     mark(prelude_symtable);
     sweep();
     printf("\n");
